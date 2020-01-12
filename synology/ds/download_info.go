@@ -52,6 +52,7 @@ type AddTrackersRequest struct {
     Trackers []string `url:"tracker"`
 }
 
+// NewAddTrackersRequest 创建增加Tracker列表请求
 func NewAddTrackersRequest(taskId string, trackers []string) *AddTrackersRequest {
     return &AddTrackersRequest{
         BaseRequest: synology.NewBaseRequest("SYNO.DownloadStation2.Task.BT.Tracker", "add", 2),

@@ -20,12 +20,11 @@ type Synology struct {
     Password string
 }
 
-func (synology *Synology) UpdateToBest(trackers []string) (err error) {
-    return
-}
-
+// Response 响应接口
 type Response interface {
+    // IsSuccess 响应是否成功
     IsSuccess() bool
+    // Code 响应码
     Code() Code
 }
 
@@ -61,6 +60,7 @@ type BaseRequest struct {
     Method  string
 }
 
+// NewBaseRequest 创建基础请求
 func NewBaseRequest(api string, method string, version int) BaseRequest {
     return BaseRequest{
         Api:     api,
@@ -79,6 +79,7 @@ type LoginRequest struct {
     Format  string
 }
 
+// NewLoginRequest 创建登录请求
 func NewLoginRequest(username string, password string, session string) LoginRequest {
     return LoginRequest{
         BaseRequest: NewBaseRequest("SYNO.API.Auth", "login", 2),

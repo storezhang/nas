@@ -9,6 +9,7 @@ import (
     `nas/synology`
 )
 
+// DownloadApi 下载接口
 type DownloadApi interface {
     // List 列出所有的下载任务
     List(
@@ -25,7 +26,7 @@ type DownloadApi interface {
     AddTrackers(taskId string, trackers []string) (rsp *synology.BaseResponse, err error)
 }
 
-func (ds *downloadStation) List(
+func (ds *DownloadStation) List(
     sortBy string,
     order string,
     limit int,
@@ -59,7 +60,7 @@ func (ds *downloadStation) List(
     return
 }
 
-func (ds *downloadStation) AddTrackers(taskId string, trackers []string) (data *synology.BaseResponse, err error) {
+func (ds *DownloadStation) AddTrackers(taskId string, trackers []string) (data *synology.BaseResponse, err error) {
     if callRsp, callErr := synology.Call(
         ds.synology,
         Session,

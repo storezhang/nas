@@ -6,12 +6,14 @@ import (
 
 const Session string = "DownloadStation2"
 
-type downloadStation struct {
+// DownloadStation 封装
+type DownloadStation struct {
     synology *synology.Synology
 }
 
-func NewDS(synology *synology.Synology) (ds *downloadStation) {
-    return &downloadStation{
+// NewDS 创建新的DS
+func NewDS(synology *synology.Synology) (ds *DownloadStation) {
+    return &DownloadStation{
         synology: synology,
     }
 }
