@@ -1,0 +1,23 @@
+kind: pipeline
+name: nasapi
+
+clone:
+  disable: true
+
+steps:
+  - name: clone
+    image: plugins/git
+    recursive: true
+
+
+  - name: test
+    image: ataraev/golang-alpine-git
+    volumes:
+      - name: deps
+        path: /go
+    commands:
+      - go test
+
+volumes:
+  - name: deps
+    temp: {}
