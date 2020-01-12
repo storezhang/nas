@@ -1,7 +1,7 @@
 package ds
 
 import (
-    `songjiang/synology`
+    `nas/synology`
 )
 
 // DownloadInfoRequest 请求下载信息

@@ -1,4 +1,4 @@
-module nasapi
+module nas
 
 go 1.13
 

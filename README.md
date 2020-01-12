@@ -1,5 +1,5 @@
-# NAS API封装
-[![Build Status](https://cloud.drone.io/api/badges/storezhang/nasapi/status.svg)](https://cloud.drone.io/storezhang/nasapi)
+# NAS封装
+[![Build Status](https://cloud.drone.io/api/badges/storezhang/nas/status.svg)](https://cloud.drone.io/storezhang/nas)
 
 封装流行的NAS的API
 

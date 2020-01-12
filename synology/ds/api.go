@@ -6,7 +6,7 @@ import (
     `github.com/parnurzeal/gorequest`
     `github.com/storezhang/gos/urls`
 
-    `songjiang/synology`
+    `nas/synology`
 )
 
 type DownloadApi interface {

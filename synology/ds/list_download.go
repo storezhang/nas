@@ -1,7 +1,7 @@
 package ds
 
 import (
-    `songjiang/synology`
+    `nas/synology`
 )
 
 // ListDownloadRequest 获得下载列表
