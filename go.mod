@@ -1,4 +1,4 @@
-module nas
+module github.com/storezhang/nas
 
 go 1.13
 
