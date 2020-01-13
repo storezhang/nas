@@ -80,7 +80,7 @@ func NewTrackersAddRequest(taskId string, trackers []string) *trackersRequest {
     }
 }
 
-// NewTrackersDeleteRequest 创建增加Tracker列表请求
+// NewTrackersDeleteRequest 创建删除Tracker列表请求
 func NewTrackersDeleteRequest(taskId string, trackers []string) *trackersRequest {
     return &trackersRequest{
         BaseRequest: synology.NewBaseRequest("SYNO.DownloadStation2.Task.BT.Tracker", "delete", 2),
