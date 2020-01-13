@@ -1,11 +1,6 @@
 package ds
 
 import (
-    `fmt`
-
-    `github.com/parnurzeal/gorequest`
-    `github.com/storezhang/gos/urls`
-
     `github.com/storezhang/nas/synology`
 )
 
@@ -24,6 +19,9 @@ type DownloadApi interface {
 
     // AddTrackers 给任务添加Tracker
     AddTrackers(taskId string, trackers []string) (rsp *synology.BaseResponse, err error)
+
+    // RemoveTrackers 删除Tracker
+    RemoveTrackers(taskId string, trackers []string) (rsp *synology.BaseResponse, err error)
 }
 
 func (ds *DownloadStation) List(
@@ -34,28 +32,14 @@ func (ds *DownloadStation) List(
     additional []string,
     status []int,
 ) (data *ListDownloadResponse, err error) {
-    if callRsp, callErr := synology.Call(
+    var callRsp synology.Response
+    callRsp, err = synology.CallApi(
         ds.synology,
         Session,
-        func(httpClient *gorequest.SuperAgent) (callRsp synology.Response, callErr error) {
-            var listDownloadRsp ListDownloadResponse
-
-            _, _, listErr := httpClient.Post(fmt.Sprintf("%s/webapi/entry.cgi", ds.synology.Url)).
-                Send(urls.QueryString(NewListDownloadRequest(sortBy, order, "getall", limit, typ, additional, status))).
-                EndStruct(&listDownloadRsp)
-            if nil != listErr {
-                callErr = listErr[0]
-            } else {
-                callRsp = &listDownloadRsp
-            }
-
-            return
-        },
-    ); nil != callErr {
-        err = callErr
-    } else {
-        data = callRsp.(*ListDownloadResponse)
-    }
+        synology.MethodPost,
+        NewListDownloadRequest(sortBy, order, "getall", limit, typ, additional, status),
+    )
+    data = callRsp.(*ListDownloadResponse)
 
     return
 }
@@ -66,28 +50,32 @@ func (ds *DownloadStation) AddTrackers(taskId string, trackers []string) (data *
         return
     }
 
-    if callRsp, callErr := synology.Call(
+    var callRsp synology.Response
+    callRsp, err = synology.CallApi(
         ds.synology,
         Session,
-        func(httpClient *gorequest.SuperAgent) (callRsp synology.Response, callErr error) {
-            var addTrackerRsp synology.BaseResponse
+        synology.MethodPost,
+        NewTrackersAddRequest(taskId, trackers),
+    )
+    data = callRsp.(*synology.BaseResponse)
 
-            _, _, listErr := httpClient.Post(fmt.Sprintf("%s/webapi/entry.cgi", ds.synology.Url)).
-                Send(urls.QueryString(NewAddTrackersRequest(taskId, trackers))).
-                EndStruct(&addTrackerRsp)
-            if nil != listErr {
-                callErr = listErr[0]
-            } else {
-                callRsp = &addTrackerRsp
-            }
+    return
+}
 
-            return
-        },
-    ); nil != callErr {
-        err = callErr
-    } else {
-        data = callRsp.(*synology.BaseResponse)
+func (ds *DownloadStation) RemoveTrackers(taskId string, trackers []string) (data *synology.BaseResponse, err error) {
+    if nil == trackers || 0 == len(trackers) {
+        data = synology.NewSuccessResponse()
+        return
     }
+
+    var callRsp synology.Response
+    callRsp, err = synology.CallApi(
+        ds.synology,
+        Session,
+        synology.MethodPost,
+        NewTrackersDeleteRequest(taskId, trackers),
+    )
+    data = callRsp.(*synology.BaseResponse)
 
     return
 }

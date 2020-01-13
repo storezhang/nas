@@ -1,6 +1,8 @@
 package ds
 
 import (
+    `strings`
+
     `github.com/storezhang/nas/synology`
 )
 
@@ -38,6 +40,16 @@ func (info *DownloadInfo) GetTrackers() (trackers []string) {
     return
 }
 
+func (info *DownloadInfo) GetFailedTrackers() (trackers []string) {
+    for _, t := range info.Additional.Trackers {
+        if "success" != strings.ToLower(t.Status) {
+            trackers = append(trackers, t.Url)
+        }
+    }
+
+    return
+}
+
 // Additional 附加信息
 type Additional struct {
     Trackers []Tracker `json:"tracker"`
@@ -52,18 +64,26 @@ type Tracker struct {
     Url         string
 }
 
-// AddTrackersRequest 添加BT Tracker请求
-type AddTrackersRequest struct {
+type trackersRequest struct {
     synology.BaseRequest
 
     TaskId   string   `url:"task_id"`
     Trackers []string `url:"tracker"`
 }
 
-// NewAddTrackersRequest 创建增加Tracker列表请求
-func NewAddTrackersRequest(taskId string, trackers []string) *AddTrackersRequest {
-    return &AddTrackersRequest{
+// NewTrackersAddRequest 创建增加Tracker列表请求
+func NewTrackersAddRequest(taskId string, trackers []string) *trackersRequest {
+    return &trackersRequest{
         BaseRequest: synology.NewBaseRequest("SYNO.DownloadStation2.Task.BT.Tracker", "add", 2),
+        TaskId:      taskId,
+        Trackers:    trackers,
+    }
+}
+
+// NewTrackersDeleteRequest 创建增加Tracker列表请求
+func NewTrackersDeleteRequest(taskId string, trackers []string) *trackersRequest {
+    return &trackersRequest{
+        BaseRequest: synology.NewBaseRequest("SYNO.DownloadStation2.Task.BT.Tracker", "delete", 2),
         TaskId:      taskId,
         Trackers:    trackers,
     }

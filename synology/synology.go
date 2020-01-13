@@ -4,7 +4,7 @@ import (
     `fmt`
     `net/http`
 
-    `github.com/parnurzeal/gorequest`
+    `github.com/storezhang/gos/urls`
 )
 
 type Code int
@@ -104,13 +104,27 @@ func NewDSLoginRequest(username string, password string) LoginRequest {
 }
 
 // Call 统一请求，增加重试机制等
+type MethodCall string
+
+const (
+    MethodGet  MethodCall = "GET"
+    MethodPost MethodCall = "POST"
+)
+
 func Call(
     synology *Synology,
     session string,
-    method func(httpClient *gorequest.SuperAgent) (callRsp Response, callErr error),
+    url string,
+    method MethodCall,
+    body interface{},
 ) (rsp Response, err error) {
-    if callRsp, callErr := method(httpClient.Clone()); nil != callErr {
-        err = callErr
+    var callRsp Response
+
+    _, _, callErr := httpClient.Clone().CustomMethod(string(method), fmt.Sprintf("%s/%s", synology.Url, url)).
+        Send(urls.QueryString(body)).
+        EndStruct(callRsp)
+    if nil != callErr {
+        err = callErr[0]
     } else if !callRsp.IsSuccess() && CodeNeedLogin == callRsp.Code() { // 需要登录
         var loginRsp LoginResponse
 
@@ -125,11 +139,21 @@ func Call(
                 Name:  "id",
                 Value: loginRsp.Data.Sid,
             })
-            rsp, err = Call(synology, session, method)
+            rsp, err = Call(synology, session, url, method, body)
         }
     } else { // 调用成功，返回
         rsp = callRsp
     }
 
     return
+}
+
+// CallApi Api调用
+func CallApi(
+    synology *Synology,
+    session string,
+    method MethodCall,
+    body interface{},
+) (rsp Response, err error) {
+    return Call(synology, session, "webapi/entry.cgi", method, body)
 }
