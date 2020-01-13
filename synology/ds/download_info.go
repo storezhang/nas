@@ -1,7 +1,7 @@
 package ds
 
 import (
-    `nas/synology`
+    `github.com/storezhang/nas/synology`
 )
 
 // DownloadInfoRequest 请求下载信息

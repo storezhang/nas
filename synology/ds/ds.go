@@ -1,7 +1,7 @@
 package ds
 
 import (
-    `nas/synology`
+    `github.com/storezhang/nas/synology`
 )
 
 const Session string = "DownloadStation2"

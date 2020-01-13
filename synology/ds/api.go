@@ -6,7 +6,7 @@ import (
     `github.com/parnurzeal/gorequest`
     `github.com/storezhang/gos/urls`
 
-    `nas/synology`
+    `github.com/storezhang/nas/synology`
 )
 
 // DownloadApi 下载接口
