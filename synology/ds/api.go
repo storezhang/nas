@@ -54,7 +54,7 @@ func (ds *DownloadStation) AddTrackers(taskId string, trackers []string) (rsp *s
 
     var callResponse synology.BaseResponse
     err = synology.CallApi(
-        rsp,
+        &callResponse,
         ds.synology,
         Session,
         synology.MethodPost,
@@ -73,7 +73,7 @@ func (ds *DownloadStation) DeleteTrackers(taskId string, trackers []string) (rsp
 
     var callResponse synology.BaseResponse
     err = synology.CallApi(
-        rsp,
+        &callResponse,
         ds.synology,
         Session,
         synology.MethodPost,
