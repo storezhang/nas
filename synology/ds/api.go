@@ -32,13 +32,16 @@ func (ds *DownloadStation) List(
     additional []string,
     status []int,
 ) (rsp *ListDownloadResponse, err error) {
+    var callResponse ListDownloadResponse
+
     err = synology.CallApi(
-        rsp,
+        &callResponse,
         ds.synology,
         Session,
         synology.MethodPost,
         NewListDownloadRequest(sortBy, order, "getall", limit, typ, additional, status),
     )
+    rsp = &callResponse
 
     return
 }
@@ -49,6 +52,7 @@ func (ds *DownloadStation) AddTrackers(taskId string, trackers []string) (rsp *s
         return
     }
 
+    var callResponse synology.BaseResponse
     err = synology.CallApi(
         rsp,
         ds.synology,
@@ -56,6 +60,7 @@ func (ds *DownloadStation) AddTrackers(taskId string, trackers []string) (rsp *s
         synology.MethodPost,
         NewTrackersAddRequest(taskId, trackers),
     )
+    rsp = &callResponse
 
     return
 }
@@ -66,6 +71,7 @@ func (ds *DownloadStation) DeleteTrackers(taskId string, trackers []string) (rsp
         return
     }
 
+    var callResponse synology.BaseResponse
     err = synology.CallApi(
         rsp,
         ds.synology,
@@ -73,5 +79,7 @@ func (ds *DownloadStation) DeleteTrackers(taskId string, trackers []string) (rsp
         synology.MethodPost,
         NewTrackersDeleteRequest(taskId, trackers),
     )
+    rsp = &callResponse
+
     return
 }
