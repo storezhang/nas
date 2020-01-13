@@ -36,6 +36,14 @@ type BaseResponse struct {
     }
 }
 
+// NewSuccessResponse 创建新的成功的响应
+func NewSuccessResponse() *BaseResponse {
+    return &BaseResponse{
+        Success: true,
+        Error:   struct{ Code Code }{Code: 0},
+    }
+}
+
 func (rsp *BaseResponse) IsSuccess() bool {
     return rsp.Success
 }

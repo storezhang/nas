@@ -61,6 +61,11 @@ func (ds *DownloadStation) List(
 }
 
 func (ds *DownloadStation) AddTrackers(taskId string, trackers []string) (data *synology.BaseResponse, err error) {
+    if nil == trackers || 0 == len(trackers) {
+        data = synology.NewSuccessResponse()
+        return
+    }
+
     if callRsp, callErr := synology.Call(
         ds.synology,
         Session,
