@@ -20,8 +20,8 @@ type DownloadApi interface {
     // AddTrackers 给任务添加Tracker
     AddTrackers(taskId string, trackers []string) (rsp *synology.BaseResponse, err error)
 
-    // RemoveTrackers 删除Tracker
-    RemoveTrackers(taskId string, trackers []string) (rsp *synology.BaseResponse, err error)
+    // DeleteTrackers 删除Tracker
+    DeleteTrackers(taskId string, trackers []string) (rsp *synology.BaseResponse, err error)
 }
 
 func (ds *DownloadStation) List(
