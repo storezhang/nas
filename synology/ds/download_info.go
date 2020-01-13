@@ -30,6 +30,14 @@ type DownloadInfo struct {
     Additional Additional
 }
 
+func (info *DownloadInfo) GetTrackers() (trackers []string) {
+    for _, t := range info.Additional.Trackers {
+        trackers = append(trackers, t.Url)
+    }
+
+    return
+}
+
 // Additional 附加信息
 type Additional struct {
     Trackers []Tracker `json:"tracker"`
@@ -39,7 +47,7 @@ type Additional struct {
 type Tracker struct {
     Peers       int
     Seeds       int
-    status      string
+    Status      string
     UpdateTimer int `json:"update_timer"`
     Url         string
 }
