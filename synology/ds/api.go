@@ -62,7 +62,7 @@ func (ds *DownloadStation) AddTrackers(taskId string, trackers []string) (data *
     return
 }
 
-func (ds *DownloadStation) RemoveTrackers(taskId string, trackers []string) (data *synology.BaseResponse, err error) {
+func (ds *DownloadStation) DeleteTrackers(taskId string, trackers []string) (data *synology.BaseResponse, err error) {
     if nil == trackers || 0 == len(trackers) {
         data = synology.NewSuccessResponse()
         return
