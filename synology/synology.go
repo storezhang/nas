@@ -122,7 +122,7 @@ func Call(
 
     _, _, callErr := httpClient.Clone().CustomMethod(string(method), fmt.Sprintf("%s/%s", synology.Url, url)).
         Send(urls.QueryString(body)).
-        EndStruct(callRsp)
+        EndStruct(&callRsp)
     if nil != callErr {
         err = callErr[0]
     } else if !callRsp.IsSuccess() && CodeNeedLogin == callRsp.Code() { // 需要登录
