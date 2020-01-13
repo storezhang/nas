@@ -112,20 +112,19 @@ const (
 )
 
 func Call(
+    rsp Response,
     synology *Synology,
     session string,
     url string,
     method MethodCall,
     body interface{},
-) (rsp Response, err error) {
-    var callRsp Response
-
+) (err error) {
     _, _, callErr := httpClient.Clone().CustomMethod(string(method), fmt.Sprintf("%s/%s", synology.Url, url)).
         Send(urls.QueryString(body)).
-        EndStruct(&callRsp)
+        EndStruct(rsp)
     if nil != callErr {
         err = callErr[0]
-    } else if !callRsp.IsSuccess() && CodeNeedLogin == callRsp.Code() { // 需要登录
+    } else if !rsp.IsSuccess() && CodeNeedLogin == rsp.Code() { // 需要登录
         var loginRsp LoginResponse
 
         _, _, loginErr := httpClient.Get(fmt.Sprintf("%s/webapi/auth.cgi", synology.Url)).
@@ -139,10 +138,8 @@ func Call(
                 Name:  "id",
                 Value: loginRsp.Data.Sid,
             })
-            rsp, err = Call(synology, session, url, method, body)
+            err = Call(rsp, synology, session, url, method, body)
         }
-    } else { // 调用成功，返回
-        rsp = callRsp
     }
 
     return
@@ -150,10 +147,11 @@ func Call(
 
 // CallApi Api调用
 func CallApi(
+    rsp Response,
     synology *Synology,
     session string,
     method MethodCall,
     body interface{},
-) (rsp Response, err error) {
-    return Call(synology, session, "webapi/entry.cgi", method, body)
+) (err error) {
+    return Call(rsp, synology, session, "webapi/entry.cgi", method, body)
 }

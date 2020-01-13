@@ -31,51 +31,47 @@ func (ds *DownloadStation) List(
     typ []string,
     additional []string,
     status []int,
-) (data *ListDownloadResponse, err error) {
-    var callRsp synology.Response
-    callRsp, err = synology.CallApi(
+) (rsp *ListDownloadResponse, err error) {
+    err = synology.CallApi(
+        rsp,
         ds.synology,
         Session,
         synology.MethodPost,
         NewListDownloadRequest(sortBy, order, "getall", limit, typ, additional, status),
     )
-    data = callRsp.(*ListDownloadResponse)
 
     return
 }
 
-func (ds *DownloadStation) AddTrackers(taskId string, trackers []string) (data *synology.BaseResponse, err error) {
+func (ds *DownloadStation) AddTrackers(taskId string, trackers []string) (rsp *synology.BaseResponse, err error) {
     if nil == trackers || 0 == len(trackers) {
-        data = synology.NewSuccessResponse()
+        rsp = synology.NewSuccessResponse()
         return
     }
 
-    var callRsp synology.Response
-    callRsp, err = synology.CallApi(
+    err = synology.CallApi(
+        rsp,
         ds.synology,
         Session,
         synology.MethodPost,
         NewTrackersAddRequest(taskId, trackers),
     )
-    data = callRsp.(*synology.BaseResponse)
 
     return
 }
 
-func (ds *DownloadStation) DeleteTrackers(taskId string, trackers []string) (data *synology.BaseResponse, err error) {
+func (ds *DownloadStation) DeleteTrackers(taskId string, trackers []string) (rsp *synology.BaseResponse, err error) {
     if nil == trackers || 0 == len(trackers) {
-        data = synology.NewSuccessResponse()
+        rsp = synology.NewSuccessResponse()
         return
     }
 
-    var callRsp synology.Response
-    callRsp, err = synology.CallApi(
+    err = synology.CallApi(
+        rsp,
         ds.synology,
         Session,
         synology.MethodPost,
         NewTrackersDeleteRequest(taskId, trackers),
     )
-    data = callRsp.(*synology.BaseResponse)
-
     return
 }
