@@ -14,4 +14,7 @@ type DownloadApi interface {
 
     // Set 设置任务
     Set(req *setRequest) (rsp *synology.BaseResponse, err error)
+
+    // Delete 删除
+    Delete(req *deleteRequest) (rsp *synology.BaseResponse, err error)
 }
