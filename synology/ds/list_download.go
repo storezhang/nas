@@ -20,7 +20,6 @@ type listDownloadRequest struct {
 func NewListAllDownloadRequest(
     sortBy string,
     order string,
-    action string,
     limit int,
     typ []string,
     additional []string,
