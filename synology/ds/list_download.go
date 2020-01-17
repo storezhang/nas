@@ -4,8 +4,8 @@ import (
     `github.com/storezhang/nas/synology`
 )
 
-// ListDownloadRequest 获得下载列表
-type ListDownloadRequest struct {
+// listDownloadRequest 获得下载列表
+type listDownloadRequest struct {
     synology.BaseRequest
 
     SortBy     string `url:"sort_by"`
@@ -17,7 +17,7 @@ type ListDownloadRequest struct {
     Status     []int
 }
 
-func NewListDownloadRequest(
+func NewListAllDownloadRequest(
     sortBy string,
     order string,
     action string,
@@ -25,12 +25,12 @@ func NewListDownloadRequest(
     typ []string,
     additional []string,
     status []int,
-) *ListDownloadRequest {
-    return &ListDownloadRequest{
+) *listDownloadRequest {
+    return &listDownloadRequest{
         BaseRequest: synology.NewBaseRequest("SYNO.DownloadStation2.Task", "list", 2),
         SortBy:      sortBy,
         Order:       order,
-        Action:      action,
+        Action:      "getall",
         Limit:       limit,
         Type:        typ,
         Additional:  additional,

@@ -7,79 +7,11 @@ import (
 // DownloadApi 下载接口
 type DownloadApi interface {
     // List 列出所有的下载任务
-    List(
-        sortBy string,
-        order string,
-        action string,
-        limit int,
-        typ []string,
-        additional []string,
-        status []int,
-    ) (rsp *ListDownloadResponse, err error)
+    List(req *listDownloadRequest) (rsp *ListDownloadResponse, err error)
 
-    // AddTrackers 给任务添加Tracker
-    AddTrackers(taskId string, trackers []string) (rsp *synology.BaseResponse, err error)
+    // SetTrackers 给任务设置Tracker
+    SetTrackers(req *trackersRequest) (rsp *synology.BaseResponse, err error)
 
-    // DeleteTrackers 删除Tracker
-    DeleteTrackers(taskId string, trackers []string) (rsp *synology.BaseResponse, err error)
-}
-
-func (ds *DownloadStation) List(
-    sortBy string,
-    order string,
-    limit int,
-    typ []string,
-    additional []string,
-    status []int,
-) (rsp *ListDownloadResponse, err error) {
-    var callResponse ListDownloadResponse
-
-    err = synology.CallApi(
-        &callResponse,
-        ds.synology,
-        Session,
-        synology.MethodPost,
-        NewListDownloadRequest(sortBy, order, "getall", limit, typ, additional, status),
-    )
-    rsp = &callResponse
-
-    return
-}
-
-func (ds *DownloadStation) AddTrackers(taskId string, trackers []string) (rsp *synology.BaseResponse, err error) {
-    if nil == trackers || 0 == len(trackers) {
-        rsp = synology.NewSuccessResponse()
-        return
-    }
-
-    var callResponse synology.BaseResponse
-    err = synology.CallApi(
-        &callResponse,
-        ds.synology,
-        Session,
-        synology.MethodPost,
-        NewTrackersAddRequest(taskId, trackers),
-    )
-    rsp = &callResponse
-
-    return
-}
-
-func (ds *DownloadStation) DeleteTrackers(taskId string, trackers []string) (rsp *synology.BaseResponse, err error) {
-    if nil == trackers || 0 == len(trackers) {
-        rsp = synology.NewSuccessResponse()
-        return
-    }
-
-    var callResponse synology.BaseResponse
-    err = synology.CallApi(
-        &callResponse,
-        ds.synology,
-        Session,
-        synology.MethodPost,
-        NewTrackersDeleteRequest(taskId, trackers),
-    )
-    rsp = &callResponse
-
-    return
+    // Set 设置任务
+    Set(req *setRequest) (rsp *synology.BaseResponse, err error)
 }

@@ -88,3 +88,20 @@ func NewTrackersDeleteRequest(taskId string, trackers []string) *trackersRequest
         Trackers:    trackers,
     }
 }
+
+type setRequest struct {
+    synology.BaseRequest
+
+    TaskId   string `url:"task_id"`
+    Priority string
+    MaxPeers int `url:"max_peers"`
+}
+
+// NewMaxPeersSetRequest 设置Max Peers请求
+func NewMaxPeersSetRequest(taskId string, maxPeers int) *setRequest {
+    return &setRequest{
+        BaseRequest: synology.NewBaseRequest("SYNO.DownloadStation2.Task.BT", "set", 2),
+        TaskId:      taskId,
+        MaxPeers:    maxPeers,
+    }
+}
